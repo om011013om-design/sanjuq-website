@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="منصة شروحات سنجوق - شارك وتعلم">
+    <title>شروحات سنجوق</title>
+    
+    <!-- الخطوط -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ========== الهيدر ========== -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <!-- اللوجو -->
+            <a href="#" class="logo" onclick="showSection('home')">
+                <i class="fas fa-play-circle"></i>
+                <span>شروحات سنجوق</span>
+            </a>
+
+            <!-- البحث -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ابحث عن شرح..." onkeyup="searchVideos(event)">
+                <button onclick="searchVideos()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- أزرار التنقل - قبل تسجيل الدخول -->
+            <nav class="nav-buttons" id="guestNav">
+                <button class="btn btn-outline" onclick="showModal('login')">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>دخول</span>
+                </button>
+                <button class="btn btn-primary" onclick="showModal('register')">
+                    <i class="fas fa-user-plus"></i>
+                    <span>حساب جديد</span>
+                </button>
+            </nav>
+
+            <!-- أزرار التنقل - بعد تسجيل الدخول -->
+            <nav class="nav-buttons" id="userNav" style="display: none;">
+                <button class="btn btn-primary" onclick="showSection('upload')">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>رفع فيديو</span>
+                </button>
+                <div class="user-menu" id="userMenu">
+                    <button class="user-avatar" onclick="toggleUserMenu()" id="userAvatarBtn">
+                        <span id="userInitial">م</span>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-info">
+                            <span class="user-name" id="headerUserName">المستخدم</span>
+                            <span class="user-email" id="headerUserEmail">email@example.com</span>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a onclick="showSection('profile')">
+                            <i class="fas fa-user"></i> ملفي الشخصي
+                        </a>
+                        <a onclick="showSection('myVideos')">
+                            <i class="fas fa-video"></i> فيديوهاتي
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a onclick="logout()" class="logout-link">
+                            <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- زر القائمة للموبايل -->
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ========== المحتوى الرئيسي ========== -->
+    <main class="main-content">
+        
+        <!-- ===== الصفحة الرئيسية ===== -->
+        <section class="page active" id="homePage">
+            <!-- البانر -->
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>🎬 شروحات سنجوق</h1>
+                    <p>منصتك الأولى لمشاركة ومشاهدة الشروحات التعليمية بأمان تام</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('videosSection').scrollIntoView({behavior: 'smooth'})">
+                            <i class="fas fa-compass"></i> استكشف الشروحات
+                        </button>
+                        <button class="btn btn-outline btn-lg" id="heroActionBtn" onclick="showModal('register')">
+                            <i class="fas fa-rocket"></i> ابدأ الآن
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="totalVideosCount">0</span>
+                        <span class="stat-label">شرح</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="totalUsersCount">0</span>
+                        <span class="stat-label">مستخدم</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="totalViewsCount">0</span>
+                        <span class="stat-label">مشاهدة</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التصنيفات -->
+            <div class="categories-section">
+                <div class="categories-container" id="categoriesContainer">
+                    <button class="category-btn active" data-category="all">
+                        <i class="fas fa-th-large"></i> الكل
+                    </button>
+                    <button class="category-btn" data-category="programming">
+                        <i class="fas fa-code"></i> برمجة
+                    </button>
+                    <button class="category-btn" data-category="design">
+                        <i class="fas fa-palette"></i> تصميم
+                    </button>
+                    <button class="category-btn" data-category="networks">
+                        <i class="fas fa-network-wired"></i> شبكات
+                    </button>
+                    <button class="category-btn" data-category="security">
+                        <i class="fas fa-shield-alt"></i> أمن سيبراني
+                    </button>
+                    <button class="category-btn" data-category="ai">
+                        <i class="fas fa-robot"></i> ذكاء اصطناعي
+                    </button>
+                    <button class="category-btn" data-category="other">
+                        <i class="fas fa-ellipsis-h"></i> أخرى
+                    </button>
+                </div>
+            </div>
+
+            <!-- الفيديوهات -->
+            <section class="videos-section" id="videosSection">
+                <div class="section-header">
+                    <h2><i class="fas fa-fire"></i> أحدث الشروحات</h2>
+                </div>
+                <div class="videos-grid" id="videosGrid">
+                    <!-- الفيديوهات ستُحمّل هنا -->
+                </div>
+                <div class="loading-videos" id="loadingVideos" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>جاري تحميل الشروحات...</p>
+                </div>
+                <div class="no-videos" id="noVideos" style="display: none;">
+                    <i class="fas fa-video-slash"></i>
+                    <h3>لا توجد شروحات حالياً</h3>
+                    <p>كن أول من يرفع شرح!</p>
+                    <button class="btn btn-primary" onclick="showSection('upload')">
+                        <i class="fas fa-upload"></i> رفع شرح
+                    </button>
+                </div>
+            </section>
+        </section>
+
+        <!-- ===== صفحة مشاهدة الفيديو ===== -->
+        <section class="page" id="watchPage">
+            <div class="watch-container">
+                <!-- زر الرجوع -->
+                <button class="btn btn-outline back-btn" onclick="showSection('home')">
+                    <i class="fas fa-arrow-right"></i> رجوع
+                </button>
+
+                <!-- مشغل الفيديو -->
+                <div class="video-player-wrapper">
+                    <div class="protected-video-container" id="videoContainer">
+                        <video id="mainPlayer" controls controlsList="nodownload" 
+                               disablePictureInPicture oncontextmenu="return false;">
+                        </video>
+                        <div class="video-watermark" id="videoWatermark"></div>
+                        <div class="video-protection-overlay"></div>
+                    </div>
+                </div>
+
+                <!-- معلومات الفيديو -->
+                <div class="video-info-section">
+                    <h1 class="video-title" id="watchTitle">عنوان الفيديو</h1>
+                    
+                    <div class="video-meta">
+                        <div class="meta-right">
+                            <span><i class="fas fa-eye"></i> <span id="watchViews">0</span> مشاهدة</span>
+                            <span><i class="fas fa-calendar"></i> <span id="watchDate">اليوم</span></span>
+                        </div>
+                        <div class="meta-left">
+                            <button class="action-btn" id="likeBtn" onclick="toggleLike()">
+                                <i class="far fa-heart"></i>
+                                <span id="watchLikes">0</span>
+                            </button>
+                            <button class="action-btn" onclick="shareVideo()">
+                                <i class="fas fa-share"></i>
+                                مشاركة
+                            </button>
+                            <button class="action-btn" onclick="reportVideo()">
+                                <i class="fas fa-flag"></i>
+                                إبلاغ
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="uploader-info">
+                        <div class="uploader-avatar" id="uploaderAvatar">م</div>
+                        <div class="uploader-details">
+                            <span class="uploader-name" id="uploaderName">اسم الناشر</span>
+                            <span class="uploader-videos"><span id="uploaderVideosCount">0</span> شرح</span>
+                        </div>
+                    </div>
+
+                    <div class="video-description" id="watchDescription">
+                        وصف الفيديو يظهر هنا...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== صفحة رفع فيديو ===== -->
+        <section class="page" id="uploadPage">
+            <div class="upload-container">
+                <div class="page-header">
+                    <h1><i class="fas fa-cloud-upload-alt"></i> رفع شرح جديد</h1>
+                    <p>شارك معرفتك مع المجتمع</p>
+                </div>
+
+                <!-- منطقة السحب والإفلات -->
+                <div class="upload-dropzone" id="uploadDropzone">
+                    <input type="file" id="videoFileInput" accept="video/*" hidden>
+                    <div class="dropzone-content">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>اسحب الفيديو هنا</h3>
+                        <p>أو اضغط لاختيار ملف</p>
+                        <span class="file-types">MP4, MOV, WEBM - الحد الأقصى 50MB</span>
+                    </div>
+                </div>
+
+                <!-- شريط التقدم -->
+                <div class="upload-progress-section" id="uploadProgressSection" style="display: none;">
+                    <div class="progress-info">
+                        <span id="uploadFileName">video.mp4</span>
+                        <span id="uploadPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="uploadProgressFill"></div>
+                    </div>
+                    <p id="uploadStatus">جاري الرفع...</p>
+                </div>
+
+                <!-- نموذج معلومات الفيديو -->
+                <form class="upload-form" id="uploadForm" style="display: none;">
+                    <!-- معاينة الفيديو -->
+                    <div class="video-preview">
+                        <video id="previewVideo" controls></video>
+                    </div>
+
+                    <div class="form-grid">
+                        <!-- العنوان -->
+                        <div class="form-group full-width">
+                            <label for="uploadTitle">
+                                <i class="fas fa-heading"></i> عنوان الشرح *
+                            </label>
+                            <input type="text" id="uploadTitle" 
+                                   placeholder="أدخل عنوان واضح ووصفي للشرح" 
+                                   required maxlength="100">
+                            <span class="char-count"><span id="titleCount">0</span>/100</span>
+                        </div>
+
+                        <!-- الوصف -->
+                        <div class="form-group full-width">
+                            <label for="uploadDescription">
+                                <i class="fas fa-align-left"></i> الوصف
+                            </label>
+                            <textarea id="uploadDescription" 
+                                      placeholder="اكتب وصفاً تفصيلياً للشرح..."
+                                      rows="4" maxlength="500"></textarea>
+                            <span class="char-count"><span id="descCount">0</span>/500</span>
+                        </div>
+
+                        <!-- التصنيف -->
+                        <div class="form-group">
+                            <label for="uploadCategory">
+                                <i class="fas fa-folder"></i> التصنيف *
+                            </label>
+                            <select id="uploadCategory" required>
+                                <option value="">اختر تصنيف</option>
+                                <option value="programming">برمجة</option>
+                                <option value="design">تصميم</option>
+                                <option value="networks">شبكات</option>
+                                <option value="security">أمن سيبراني</option>
+                                <option value="ai">ذكاء اصطناعي</option>
+                                <option value="other">أخرى</option>
+                            </select>
+                        </div>
+
+                        <!-- خيارات الحماية -->
+                        <div class="form-group full-width">
+                            <label><i class="fas fa-shield-alt"></i> خيارات الحماية</label>
+                            <div class="checkbox-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="protectDownload" checked>
+                                    <span class="checkmark"></span>
+                                    <span>منع التحميل</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="showWatermark" checked>
+                                    <span class="checkmark"></span>
+                                    <span>إظهار علامة مائية</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- أزرار الإرسال -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="resetUpload()">
+                            <i class="fas fa-times"></i> إلغاء
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-lg" id="publishBtn">
+                            <i class="fas fa-upload"></i> نشر الشرح
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ===== صفحة الملف الشخصي ===== -->
+        <section class="page" id="profilePage">
+            <div class="profile-container">
+                <!-- غلاف الملف الشخصي -->
+                <div class="profile-cover">
+                    <div class="profile-avatar-large">
+                        <span id="profileInitial">م</span>
+                    </div>
+                </div>
+
+                <!-- معلومات المستخدم -->
+                <div class="profile-info-section">
+                    <h1 id="profileName">اسم المستخدم</h1>
+                    <p id="profileEmail">email@example.com</p>
+                    <p id="profileJoinDate">انضم في: ...</p>
+
+                    <!-- إحصائيات -->
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-video"></i>
+                            <span class="stat-value" id="profileVideosCount">0</span>
+                            <span class="stat-label">فيديو</span>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-eye"></i>
+                            <span class="stat-value" id="profileViewsCount">0</span>
+                            <span class="stat-label">مشاهدة</span>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-heart"></i>
+                            <span class="stat-value" id="profileLikesCount">0</span>
+                            <span class="stat-label">إعجاب</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- فيديوهات المستخدم -->
+                <div class="profile-videos-section">
+                    <h2><i class="fas fa-video"></i> فيديوهاتي</h2>
+                    <div class="videos-grid" id="profileVideosGrid">
+                        <!-- ستُحمّل هنا -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== صفحة فيديوهاتي ===== -->
+        <section class="page" id="myVideosPage">
+            <div class="my-videos-container">
+                <div class="section-header">
+                    <h2><i class="fas fa-video"></i> فيديوهاتي</h2>
+                    <button class="btn btn-primary" onclick="showSection('upload')">
+                        <i class="fas fa-plus"></i> رفع فيديو جديد
+                    </button>
+                </div>
+                <div class="videos-grid" id="myVideosGrid">
+                    <!-- ستُحمّل هنا -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========== نافذة تسجيل الدخول ========== -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <button class="modal-close" onclick="hideModal('login')">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header">
+                <i class="fas fa-sign-in-alt"></i>
+                <h2>تسجيل الدخول</h2>
+                <p>مرحباً بعودتك!</p>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">البريد الإلكتروني</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="loginEmail" required 
+                               placeholder="example@email.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">كلمة المرور</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" required 
+                               placeholder="••••••••">
+                        <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                    <span>تسجيل الدخول</span>
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </form>
+
+            <div class="modal-footer">
+                <p>ليس لديك حساب؟ 
+                    <a onclick="switchModal('login', 'register')">إنشاء حساب جديد</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== نافذة التسجيل ========== -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal">
+            <button class="modal-close" onclick="hideModal('register')">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header">
+                <i class="fas fa-user-plus"></i>
+                <h2>إنشاء حساب جديد</h2>
+                <p>انضم إلى مجتمع سنجوق</p>
+            </div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="registerName">الاسم الكامل</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="registerName" required 
+                               placeholder="أدخل اسمك" minlength="3">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="registerEmail">البريد الإلكتروني</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="registerEmail" required 
+                               placeholder="example@email.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="registerPassword">كلمة المرور</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="registerPassword" required 
+                               placeholder="••••••••" minlength="6">
+                        <button type="button" class="toggle-password" onclick="togglePassword('registerPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <small class="input-hint">على الأقل 6 أحرف</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">تأكيد كلمة المرور</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirmPassword" required 
+                               placeholder="••••••••">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="registerBtn">
+                    <span>إنشاء الحساب</span>
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </form>
+
+            <div class="modal-footer">
+                <p>لديك حساب بالفعل؟ 
+                    <a onclick="switchModal('register', 'login')">تسجيل الدخول</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== الإشعارات ========== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========== التحميل العام ========== -->
+    <div class="full-loader" id="fullLoader">
+        <div class="loader-content">
+            <div class="spinner-large"></div>
+            <p id="loaderText">جاري التحميل...</p>
+        </div>
+    </div>
+
+    <!-- ========== Supabase SDK ========== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- ========== ملفات JavaScript ========== -->
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/videos.js"></script>
+    <script src="js/upload.js"></script>
+    <script src="js/protection.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
